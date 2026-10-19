@@ -17,6 +17,8 @@ function StatCard({ icon: Icon, title, description, to, iconClassName = "", dela
     >
     <Link
       to={to}
+      target="_blank"
+      rel="noopener noreferrer"
       className="group relative block h-full rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm shadow-slate-900/[0.02] transition-[border-color,box-shadow] duration-200 hover:border-royal/25 hover:shadow-lg hover:shadow-slate-900/[0.06] focus-visible:outline-royal"
     >
       <span

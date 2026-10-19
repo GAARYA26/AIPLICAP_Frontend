@@ -114,6 +114,8 @@ function Navbar() {
                 >
                   <Link
                     to={link.to}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     aria-current={active ? "page" : undefined}
                     onClick={() => setMenuOpen(false)}
                     className={`block rounded-xl border px-3.5 py-3 text-sm font-medium transition-colors ${
