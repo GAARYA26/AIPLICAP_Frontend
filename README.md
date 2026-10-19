@@ -18,7 +18,10 @@ This ZIP contains the frontend source only. Dependencies and build output are in
 1. Install Node.js (use a version compatible with the Vite version in `package.json`).
 2. Run `npm install`.
 3. Copy `.env.example` to `.env` and set `VITE_API_BASE_URL` to your Spring Boot backend URL.
-4. Run `npm run dev`.
+4. Start the Spring Boot backend and confirm that its API is reachable at the configured URL.
+5. Run `npm run dev`, then open the Vite URL in the browser. Restart Vite whenever `.env` changes.
+
+Protected module navigation stays in the same browser tab so the tab-scoped login session is preserved. Directly opening a protected route without a valid session sends the user to login and returns them to that route after a successful login.
 
 ## Backend and AI integration contract
 
@@ -26,7 +29,7 @@ This repository contains the frontend only. The browser calls the backend at `VI
 
 | Workflow | Endpoint | Request | Frontend-used response fields |
 |---|---|---|---|
-| Register | `POST /api/users/register` | `{ name, email, password, role }` | Successful 2xx response |
+| Register | `POST /api/users/register` | `{ name, email, password, role }` | Successful 2xx response; frontend then logs in |
 | Login | `POST /api/auth/login` | `{ email, password }` | `{ token }` |
 | List documents | `GET /api/documents` | — | Array of `{ id, title, fileName, status, uploadedAt, uploadedBy }` |
 | Upload document | `POST /api/documents/upload` | multipart fields `file`, `title` | `{ id, title, fileName, status }` |
@@ -42,9 +45,21 @@ This repository contains the frontend only. The browser calls the backend at `VI
 | Agreement comparison | `POST /api/agreement-comparison` | `{ versionADocumentId, versionBDocumentId }` | Comparison status, summary, counts and clause differences |
 | Translation | `POST /api/translation/generate/{id}?sourceLanguage={en\|hi\|mr}&targetLanguage={en\|hi\|mr}`, `GET /api/translation/{id}` | — | `{ sourceLanguage, targetLanguage, translatedText, translationModel }` |
 
+Additional endpoints used by the interface:
+
+| Feature | Endpoint |
+|---|---|
+| Delete a document | `DELETE /api/documents/{id}` |
+| Read one clause | `GET /api/clauses/{clauseId}` |
+| Read/delete a Q&A record | `GET /api/qa/record/{queryId}`, `DELETE /api/qa/record/{queryId}` |
+| Clear a document's Q&A history | `DELETE /api/qa/{documentId}/history` |
+| Read comparison/history/delete comparison | `GET /api/agreement-comparison/{comparisonId}`, `GET /api/agreement-comparison/history/{documentId}`, `DELETE /api/agreement-comparison/{comparisonId}` |
+
+Document IDs are expected to be numeric because comparison, chat, and report requests convert selected IDs to numbers. The login response must include a non-empty `token` field; registration is followed by a login request.
+
 Return JSON errors using `{ "message": "Human-readable explanation" }` where possible. Use 401 for expired/invalid authentication, 403 for authorization failures, 404 when a requested resource/result does not exist yet, 422 when a workflow prerequisite is missing, and 5xx for backend/AI service failures. AI endpoints may return 503 when a provider is unavailable. The frontend treats missing analysis results (404) as not-yet-generated states.
 
-For local development, configure backend CORS to allow the Vite origin (default `http://localhost:5173`), the `Authorization` and `Content-Type` request headers, and the methods used by the API (`GET`, `POST`, `DELETE`, `OPTIONS`). If the backend uses cookie authentication instead of the documented bearer-token contract, configure credentials on both sides rather than exposing tokens in URLs.
+For local development, configure backend CORS to allow the exact Vite origin used in the browser (commonly `http://localhost:5173` or `http://127.0.0.1:5173`), the `Authorization` and `Content-Type` request headers, and the methods used by the API (`GET`, `POST`, `DELETE`, `OPTIONS`). If the backend uses cookie authentication instead of the documented bearer-token contract, configure credentials on both sides rather than exposing tokens in URLs.
 
 The document processing page can be refreshed safely: its document ID and filename are retained in the URL query string. The OCR poller accepts `COMPLETED`/`FAILED` as canonical status values and also normalizes common aliases (`DONE`, `SUCCESS`, `RUNNING`, `IN_PROGRESS`, `QUEUED`, `ERROR`, `CANCELLED`).
 
@@ -57,3 +72,4 @@ The document processing page can be refreshed safely: its document ID and filena
 - `npm run build` checks the production bundle.
 - `npm run lint` checks the project. Any remaining lint issue should be fixed at its source before integration.
 - Backend integration still requires a running backend and AI services configured for the endpoint contract above.
+- A frontend build does not validate Spring controller mappings, security rules, CORS, database connectivity, or AI services; test those against the running backend.

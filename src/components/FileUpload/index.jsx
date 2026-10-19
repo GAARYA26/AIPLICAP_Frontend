@@ -36,13 +36,13 @@ function FileUpload({ onFileSelected, accept = ".pdf,.jpg,.jpeg,.png" }) {
         inputRef.current?.click();
       }}
       onClick={() => inputRef.current?.click()}
-      className={`flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-16 text-center transition-colors ${
+      className={`group flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed px-6 py-16 text-center transition-[transform,border-color,background-color,box-shadow] duration-200 ease-out hover:-translate-y-0.5 hover:shadow-lg hover:shadow-royal/5 motion-reduce:transform-none motion-reduce:transition-none ${
         isDragging
           ? "border-royal bg-royal/5"
           : "border-slate-300 bg-white hover:border-royal/50"
       }`}
     >
-      <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-royal/10 text-royal">
+      <span className="flex h-14 w-14 items-center justify-center rounded-xl bg-royal/10 text-royal transition-[transform,background-color,color] duration-200 group-hover:scale-105 group-hover:bg-royal group-hover:text-white group-focus-visible:scale-105 motion-reduce:transform-none motion-reduce:transition-none">
         <UploadCloud size={22} />
       </span>
 

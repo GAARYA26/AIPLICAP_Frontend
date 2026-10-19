@@ -115,7 +115,7 @@ function Compare() {
           {documentsError && (
             <div className="mt-3 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               <AlertCircle size={14} className="shrink-0" />
-              {documentsError}
+              {t(documentsError)}
             </div>
           )}
           <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
@@ -162,7 +162,7 @@ function Compare() {
           {error && (
             <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               <AlertCircle size={14} className="shrink-0" />
-              {error}
+              {t(error)}
             </div>
           )}
 

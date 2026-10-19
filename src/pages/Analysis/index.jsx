@@ -1,4 +1,5 @@
 import { Link, Navigate, useLocation, useParams, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   Download, FileText, AlertTriangle, AlertCircle, ShieldAlert, Scale, ScrollText, ListChecks, ChevronRight,
 } from "lucide-react";
@@ -7,6 +8,8 @@ import Button from "../../components/ui/Button";
 import useAnalysis from "./useAnalysis";
 import { useLanguage } from "../../i18n/LanguageContext";
 import { getRiskTextClass } from "../../utils/risk";
+
+const MotionLink = motion.create(Link);
 
 // Each tile below opens its own page: /analysis/:documentId/<slug>
 // Titles and blurbs come from translations: analysis.<slug>.title / .blurb
@@ -83,12 +86,18 @@ function Analysis() {
         </div>
 
         <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-          {SECTIONS.map(({ slug, icon: Icon }) => (
-            <Link
+          {SECTIONS.map(({ slug, icon: Icon }, index) => (
+            <MotionLink
               key={slug}
               to={`/analysis/${documentId}/${slug}`}
               state={{ fileName }}
-              className="group flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md sm:p-6"
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              whileHover={{ y: -4 }}
+              whileTap={{ scale: 0.99 }}
+              transition={{ duration: 0.22, delay: index * 0.04, ease: "easeOut" }}
+              className="group flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-[border-color,box-shadow] hover:border-royal/20 hover:shadow-lg sm:p-6"
             >
               <div className="min-w-0">
                 <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-royal/10 text-royal">
@@ -101,13 +110,19 @@ function Analysis() {
                 </p>
               </div>
               <ChevronRight size={20} className="text-slate-300 transition-colors group-hover:text-royal" />
-            </Link>
+            </MotionLink>
           ))}
 
-          <Link
+          <MotionLink
             to="/reports"
             state={{ documentId, fileName }}
-            className="group flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-md sm:p-6"
+            initial={{ opacity: 0, y: 14 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.2 }}
+            whileHover={{ y: -4 }}
+            whileTap={{ scale: 0.99 }}
+            transition={{ duration: 0.22, delay: SECTIONS.length * 0.04, ease: "easeOut" }}
+            className="group flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-[border-color,box-shadow] hover:border-teal/20 hover:shadow-lg sm:p-6"
           >
             <div className="min-w-0">
               <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-teal/10 text-teal">
@@ -117,7 +132,7 @@ function Analysis() {
               <p className="mt-1 text-sm text-slate-500">{t("analysis.fullReport.blurb")}</p>
             </div>
             <ChevronRight size={20} className="text-slate-300 transition-colors group-hover:text-teal" />
-          </Link>
+          </MotionLink>
         </div>
       </div>
     </div>

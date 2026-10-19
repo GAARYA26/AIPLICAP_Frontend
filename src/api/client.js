@@ -14,6 +14,7 @@ export const API_BASE_URL = (
 
 const client = axios.create({
   baseURL: API_BASE_URL,
+  timeout: 30000,
 });
 
 // ─── Request interceptor: attach JWT if present ───────────────────────────────
@@ -38,8 +39,10 @@ client.interceptors.response.use(
       // Session expired — clear auth and redirect
       sessionStorage.removeItem(TOKEN_KEY);
       sessionStorage.removeItem(USER_KEY);
-      if (window.location.pathname !== "/login") {
-        window.location.href = "/login";
+      const { pathname, search, hash } = window.location;
+      if (!["/login", "/register"].includes(pathname)) {
+        const returnTo = `${pathname}${search}${hash}`;
+        window.location.href = `/login?returnTo=${encodeURIComponent(returnTo)}`;
       }
     }
 
@@ -59,17 +62,26 @@ export function extractErrorMessage(error) {
   if (data?.error) return data.error;
   if (data?.detail) return data.detail;
   if (typeof data === "string" && data.trim()) return data;
+  if (!error.response && (error.code === "ERR_NETWORK" || error.message === "Network Error")) {
+    return "errors.network";
+  }
+  if (!error.response && ["ECONNABORTED", "ETIMEDOUT"].includes(error.code)) {
+    return "errors.timeout";
+  }
+  if (error.message === "The server returned an invalid documents response.") {
+    return "errors.invalidDocuments";
+  }
   if (error.response?.status === 503) {
-    return "The AI service is temporarily unavailable. Please try again later.";
+    return "errors.serviceUnavailable";
   }
   if (error.response?.status === 422) {
-    return data?.message || "Prerequisite not met. Ensure previous steps are completed.";
+    return "errors.prerequisite";
   }
   if (error.response?.status === 403) {
-    return "Access denied. You do not have permission to access this resource.";
+    return "errors.accessDenied";
   }
   if (error.response?.status === 404) {
-    return "Resource not found.";
+    return "errors.notFound";
   }
   if (error.message) return error.message;
   return "An unexpected error occurred. Please try again.";

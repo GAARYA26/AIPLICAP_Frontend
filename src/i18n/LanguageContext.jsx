@@ -35,6 +35,7 @@ export function LanguageProvider({ children }) {
   useEffect(() => {
     try { localStorage.setItem(STORAGE_KEY, lang); } catch { /* ignore */ }
     document.documentElement.lang = lang;
+    document.title = translations[lang]["common.appName"];
   }, [lang]);
 
   const value = useMemo(() => {

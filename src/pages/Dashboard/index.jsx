@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import {
   Upload,
   MessageSquare,
@@ -70,44 +71,57 @@ function Dashboard() {
     <div className="min-h-screen bg-background">
       <Navbar />
 
-      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8">
+      <main className="mx-auto max-w-7xl px-4 py-7 sm:px-6 sm:py-10">
         {/* Welcome banner */}
-        <div className="flex flex-col gap-4 rounded-2xl bg-gradient-to-r from-navy to-secondary px-5 py-6 shadow-sm sm:px-8 sm:py-7 sm:flex-row sm:items-center sm:justify-between">
+        <motion.section
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.35, ease: "easeOut" }}
+          className="relative isolate flex flex-col gap-5 overflow-hidden rounded-3xl bg-gradient-to-br from-navy via-navy to-secondary px-5 py-7 shadow-xl shadow-navy/10 sm:px-8 sm:py-8 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <div className="pointer-events-none absolute -right-12 -top-24 -z-10 h-64 w-64 rounded-full bg-royal/20 blur-3xl" />
           <div>
-            <h1 className="text-xl font-bold text-white">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.16em] text-teal">
+              {t("common.appName")}
+            </p>
+            <h1 className="text-2xl font-bold tracking-tight text-white sm:text-3xl">
               {userName ? t("dashboard.welcomeName", { name: firstName }) : t("dashboard.welcome")}
             </h1>
-            <p className="mt-1 text-sm text-slate-300">
+            <p className="mt-2 text-sm text-slate-300 sm:text-base">
               {loading
                 ? t("dashboard.loadingDocs")
                 : t(documents.length === 1 ? "dashboard.docCount.one" : "dashboard.docCount.other", { n: documents.length })}
             </p>
           </div>
-          <Button as={Link} to="/upload" variant="teal" className="shrink-0">
+          <Button as={Link} to="/upload" variant="teal" className="shrink-0 !rounded-xl !px-5 !py-3 !text-sm">
             <Upload size={16} /> {t("dashboard.newUpload")}
           </Button>
-        </div>
+        </motion.section>
 
         {/* Quick actions */}
-        <div className="mt-6 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {QUICK_ACTIONS.map(({ icon, id, to }) => (
+        <section className="mt-7 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {QUICK_ACTIONS.map(({ icon, id, to }, index) => (
             <StatCard
               key={id}
               icon={icon}
               to={to}
+              delay={index * 0.06}
               title={t(`dashboard.qa.${id}.title`)}
               description={t(`dashboard.qa.${id}.desc`)}
             />
           ))}
-        </div>
+        </section>
 
         {/* Recent documents */}
-        <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="flex items-center justify-between">
-            <h2 className="font-semibold text-navy">{t("dashboard.recent")}</h2>
+        <section className="mt-7 rounded-3xl border border-slate-200/80 bg-white p-5 shadow-sm shadow-slate-900/[0.03] sm:p-7">
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-slate-400">{t("common.document")}</p>
+              <h2 className="mt-1 text-lg font-semibold tracking-tight text-navy">{t("dashboard.recent")}</h2>
+            </div>
             <Link
               to="/documents"
-              className="text-sm font-medium text-royal hover:underline"
+              className="rounded-lg px-3 py-2 text-sm font-semibold text-royal transition-colors hover:bg-royal/5 hover:underline"
             >
               {t("dashboard.viewAll")}
             </Link>
@@ -122,7 +136,7 @@ function Dashboard() {
           {!loading && error && (
             <div className="mt-4 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               <AlertCircle size={16} className="shrink-0" />
-              {error}
+              {t(error)}
             </div>
           )}
 
@@ -175,7 +189,7 @@ function Dashboard() {
               <div className="mt-4 hidden overflow-x-auto md:block">
               <table className="w-full min-w-[680px] border-collapse">
                 <thead>
-                  <tr className="border-b border-slate-200 text-left text-xs font-semibold uppercase tracking-wide text-slate-400">
+                  <tr className="border-b border-slate-200 bg-slate-50/80 text-left text-[11px] font-semibold uppercase tracking-[0.12em] text-slate-500">
                     <th className="pb-2 pr-4 font-semibold">{t("dashboard.col.document")}</th>
                     <th className="pb-2 pr-4 font-semibold">{t("dashboard.col.status")}</th>
                     <th className="pb-2 pr-4 font-semibold">{t("dashboard.col.uploadedBy")}</th>
@@ -187,7 +201,7 @@ function Dashboard() {
                   {recentDocs.map((doc) => (
                     <tr
                       key={doc.id}
-                      className="cursor-pointer border-b border-slate-100 hover:bg-slate-50 transition-colors"
+                      className="cursor-pointer border-b border-slate-100 transition-colors hover:bg-blue-50/40"
                       onClick={() =>
                         navigate(`/analysis/${doc.id}`, { state: { fileName: doc.title || doc.fileName } })
                       }
@@ -234,8 +248,8 @@ function Dashboard() {
               </div>
             </>
           )}
-        </div>
-      </div>
+        </section>
+      </main>
     </div>
   );
 }

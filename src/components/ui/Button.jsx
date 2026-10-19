@@ -6,7 +6,7 @@ function Button({
   ...props
 }) {
   const base =
-    "inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 font-semibold text-base transition-all duration-200 hover:scale-[1.03] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100";
+    "inline-flex items-center justify-center gap-2 rounded-2xl px-6 py-3.5 font-semibold text-base transition-[transform,background-color,border-color,box-shadow] duration-200 ease-out hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 motion-reduce:transform-none motion-reduce:transition-none";
 
   const variants = {
     // Primary CTA — Teal filled (e.g. "Upload Document" on hero)

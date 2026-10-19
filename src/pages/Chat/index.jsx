@@ -145,7 +145,7 @@ function Chat() {
             ))}
           </select>
           {documentsError && (
-            <p className="mt-2 text-sm text-red-600">{documentsError}</p>
+            <p className="mt-2 text-sm text-red-600">            {t(documentsError)}</p>
           )}
           {loadingDocuments && (
             <p className="mt-2 text-sm text-slate-500">{t("chat.loadingDocuments")}</p>
@@ -236,7 +236,7 @@ function Chat() {
           {error && (
             <div className="mx-4 mb-2 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
               <AlertCircle size={14} className="shrink-0" />
-              {error}
+              {t(error)}
             </div>
           )}
 

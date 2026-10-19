@@ -22,7 +22,7 @@ function Status({ loading, error, children }) {
   if (error) {
     return (
       <div className="flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-sm text-amber-700">
-        <AlertCircle size={14} className="shrink-0" /> {error}
+        <AlertCircle size={14} className="shrink-0" /> {t(error)}
       </div>
     );
   }

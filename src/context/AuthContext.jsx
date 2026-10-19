@@ -18,8 +18,15 @@ const AuthContext = createContext(null);
 function readSession() {
   try {
     const token = sessionStorage.getItem(TOKEN_KEY) || null;
-    const raw   = sessionStorage.getItem(USER_KEY);
-    const user  = raw ? JSON.parse(raw) : null;
+    const raw = sessionStorage.getItem(USER_KEY);
+    let user = null;
+    if (raw) {
+      try {
+        user = JSON.parse(raw);
+      } catch {
+        sessionStorage.removeItem(USER_KEY);
+      }
+    }
     return { token, user };
   } catch {
     return { token: null, user: null };
@@ -36,19 +43,15 @@ export function AuthProvider({ children }) {
    * @param {string} jwtToken   — the raw token string from LoginResponse
    * @param {object} [userObj]  — optional user profile (name, email, etc.)
    */
-  const login = (jwtToken, userObj = null) => {
-    try {
-      sessionStorage.setItem(TOKEN_KEY, jwtToken);
-      if (userObj) {
-        sessionStorage.setItem(USER_KEY, JSON.stringify(userObj));
-      } else {
-        sessionStorage.removeItem(USER_KEY);
-      }
-    } catch {
-      // Ignore storage errors in restricted environments.
-    }
-    setSession({ token: jwtToken, user: userObj });
-  };
+   const login = (jwtToken, userObj = null) => {
+     if (userObj) {
+       sessionStorage.setItem(USER_KEY, JSON.stringify(userObj));
+     } else {
+       sessionStorage.removeItem(USER_KEY);
+     }
+     sessionStorage.setItem(TOKEN_KEY, jwtToken);
+     setSession({ token: jwtToken, user: userObj });
+   };
 
   const logout = () => {
     try {

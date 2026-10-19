@@ -124,7 +124,7 @@ function Upload() {
             {uploadError && (
               <div className="flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
                 <AlertCircle size={16} className="shrink-0" />
-                {uploadError}
+                {t(uploadError)}
               </div>
             )}
 
@@ -178,7 +178,7 @@ function Upload() {
           {!loadingRecent && recentError && (
             <div className="mt-3 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700">
               <AlertCircle size={16} className="shrink-0" />
-              {recentError}
+              {t(recentError)}
             </div>
           )}
           {!loadingRecent && !recentError && recentUploads.length === 0 && (

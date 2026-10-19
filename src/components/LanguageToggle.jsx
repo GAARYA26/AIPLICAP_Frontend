@@ -1,38 +1,26 @@
 import { useLanguage } from "../i18n/LanguageContext";
 
-// The "EN | हि" pill. Clicking it flips the whole site between English and Hindi.
-// Drop <LanguageToggle /> into the Navbar and/or the Landing page header.
 export default function LanguageToggle({ className = "" }) {
   const { lang, setLang, t } = useLanguage();
   const languages = [
-    { code: "en", label: "EN", name: "English" },
-    { code: "hi", label: "हि", name: "हिन्दी" },
-    { code: "mr", label: "मर", name: "मराठी" },
+    { code: "en", name: "English" },
+    { code: "hi", name: "हिन्दी" },
+    { code: "mr", name: "मराठी" },
   ];
 
   return (
-    <div
-      role="group"
-      aria-label={t("lang.switchTo")}
-      className={`inline-flex overflow-hidden rounded-full border border-slate-200 ${className}`}
-    >
-      {languages.map(({ code, label, name }) => (
-        <button
-          key={code}
-          type="button"
-          onClick={() => setLang(code)}
-          aria-label={name}
-          aria-pressed={lang === code}
-          title={name}
-          className={`px-2.5 py-1 text-xs font-semibold transition-colors ${
-            lang === code
-              ? "bg-royal text-white"
-              : "bg-white text-slate-500 hover:text-navy"
-          }`}
-        >
-          {label}
-        </button>
-      ))}
-    </div>
+    <label className="inline-flex items-center">
+      <span className="sr-only">{t("lang.switchTo")}</span>
+      <select
+        value={lang}
+        onChange={(event) => setLang(event.target.value)}
+        aria-label={t("lang.switchTo")}
+        className={`min-h-9 rounded-lg border border-slate-200 px-2.5 text-sm font-medium text-navy outline-none transition-colors focus:ring-2 focus:ring-royal/30 ${className}`}
+      >
+        {languages.map(({ code, name }) => (
+          <option key={code} value={code}>{name}</option>
+        ))}
+      </select>
+    </label>
   );
 }

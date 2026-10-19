@@ -9,7 +9,7 @@ function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-12">
         <div className="grid grid-cols-1 gap-8 sm:grid-cols-3">
           <div>
-            <p className="text-base font-bold text-white">Legal Assistant</p>
+            <p className="text-base font-bold text-white">{t("common.appName")}</p>
             <p className="mt-3 max-w-sm text-sm text-slate-400">
               {t("footer.description")}
             </p>

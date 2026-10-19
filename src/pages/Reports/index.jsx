@@ -213,7 +213,7 @@ function Reports() {
             ))}
           </select>
           {documentsError && (
-            <p className="mt-2 text-sm text-red-600">{documentsError}</p>
+            <p className="mt-2 text-sm text-red-600">{t(documentsError)}</p>
           )}
           {loadingDocuments && (
             <p className="mt-2 text-sm text-slate-500">{t("reports.loadingDocuments")}</p>
@@ -235,7 +235,7 @@ function Reports() {
             {loadErrors.map((item, index) => (
               <li key={`${item.section}-${index}`} className="flex items-start gap-2">
                 <AlertCircle size={14} className="mt-0.5 shrink-0" />
-                {item.section ? `${t(item.section)}: ` : ""}{item.message}
+                {item.section ? `${t(item.section)}: ` : ""}{t(item.message)}
               </li>
             ))}
           </ul>
@@ -380,7 +380,7 @@ function Reports() {
               {transErr && (
                 <div className="mt-3 flex items-center gap-2 rounded-lg bg-red-50 border border-red-200 px-3 py-2 text-sm text-red-700">
                   <AlertCircle size={14} className="shrink-0" />
-                  {transErr}
+                  {t(transErr)}
                 </div>
               )}
 
